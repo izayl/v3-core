@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =0.8.12;
+pragma solidity =0.8.15;
 
 import {IERC20Minimal} from '../interfaces/IERC20Minimal.sol';
 
@@ -25,11 +25,7 @@ contract TestUniswapV3SwapPay is IUniswapV3SwapCallback {
         );
     }
 
-    function uniswapV3SwapCallback(
-        int256,
-        int256,
-        bytes calldata data
-    ) external override {
+    function uniswapV3SwapCallback(int256, int256, bytes calldata data) external override {
         (address sender, uint256 pay0, uint256 pay1) = abi.decode(data, (address, uint256, uint256));
 
         if (pay0 > 0) {

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BUSL-1.1
-pragma solidity =0.8.12;
+pragma solidity =0.8.15;
 
 import {IUniswapV3PoolImmutables, IUniswapV3PoolState, IUniswapV3PoolActions, IUniswapV3PoolDerivedState, IUniswapV3PoolOwnerActions, IUniswapV3Pool} from './interfaces/IUniswapV3Pool.sol';
 
@@ -153,16 +153,15 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
     }
 
     /// @inheritdoc IUniswapV3PoolDerivedState
-    function snapshotCumulativesInside(int24 tickLower, int24 tickUpper)
+    function snapshotCumulativesInside(
+        int24 tickLower,
+        int24 tickUpper
+    )
         external
         view
         override
         noDelegateCall
-        returns (
-            int56 tickCumulativeInside,
-            uint160 secondsPerLiquidityInsideX128,
-            uint32 secondsInside
-        )
+        returns (int56 tickCumulativeInside, uint160 secondsPerLiquidityInsideX128, uint32 secondsInside)
     {
         checkTicks(tickLower, tickUpper);
 
@@ -232,7 +231,9 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
     }
 
     /// @inheritdoc IUniswapV3PoolDerivedState
-    function observe(uint32[] calldata secondsAgos)
+    function observe(
+        uint32[] calldata secondsAgos
+    )
         external
         view
         override
@@ -251,12 +252,9 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
     }
 
     /// @inheritdoc IUniswapV3PoolActions
-    function increaseObservationCardinalityNext(uint16 observationCardinalityNext)
-        external
-        override
-        lock
-        noDelegateCall
-    {
+    function increaseObservationCardinalityNext(
+        uint16 observationCardinalityNext
+    ) external override lock noDelegateCall {
         uint16 observationCardinalityNextOld = slot0.observationCardinalityNext; // for the event
         uint16 observationCardinalityNextNew = observations.grow(
             observationCardinalityNextOld,
@@ -304,15 +302,9 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
     /// @return position a storage pointer referencing the position with the given owner and tick range
     /// @return amount0 the amount of token0 owed to the pool, negative if the pool should pay the recipient
     /// @return amount1 the amount of token1 owed to the pool, negative if the pool should pay the recipient
-    function _modifyPosition(ModifyPositionParams memory params)
-        private
-        noDelegateCall
-        returns (
-            Position.Info storage position,
-            int256 amount0,
-            int256 amount1
-        )
-    {
+    function _modifyPosition(
+        ModifyPositionParams memory params
+    ) private noDelegateCall returns (Position.Info storage position, int256 amount0, int256 amount1) {
         checkTicks(params.tickLower, params.tickUpper);
 
         Slot0 memory _slot0 = slot0; // SLOAD for gas optimization

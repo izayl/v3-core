@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =0.8.12;
+pragma solidity =0.8.15;
 
 import {IERC20Minimal} from '../interfaces/IERC20Minimal.sol';
 
@@ -36,11 +36,7 @@ contract TestERC20 is IERC20Minimal {
         return true;
     }
 
-    function transferFrom(
-        address sender,
-        address recipient,
-        uint256 amount
-    ) external override returns (bool) {
+    function transferFrom(address sender, address recipient, uint256 amount) external override returns (bool) {
         uint256 allowanceBefore = allowance[sender][msg.sender];
         require(allowanceBefore >= amount, 'allowance insufficient');
 
